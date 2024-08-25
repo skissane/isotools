@@ -28,11 +28,13 @@ void dump_sector(char* secbuf) {
             if (ch != 0) allZero = false;
         }
         if (allZero) conAllZero++; else conAllZero = 0;
-        if (conAllZero == 2) {
-            printf("\t...\n");
-            continue;
+        if (i < 127) {
+            if (conAllZero == 2) {
+                printf("\t...\n");
+                continue;
+            }
+            if (conAllZero > 2) continue;
         }
-        if (conAllZero > 2) continue;
         printf("\t%03x: ",i*16);
         for (int j = 0; j < 16; j++) {
             uint8_t ch = secbuf[(i*16)+j];
@@ -126,6 +128,7 @@ int main(int argc, char *argv[]) {
             return fprintf(stderr, "|ERROR| %s: failed reading boot catalog sector %zu\n", filebase, (size_t)sector), 1;
         printf("=== El Torito\n");
         printf("Sector %zu: EL TORITO BOOT CATALOG\n", (size_t)sector);
+        dump_sector(secbuf);
     }
     fclose(fh);
     return 0;
